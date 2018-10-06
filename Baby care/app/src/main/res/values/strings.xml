@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">유아 돌보미</string>
+    <string name="title_clothes">외출복 추천</string>
+    <string name="title_daily">데일리 이유식</string>
+    <string name="title_compare">유아 비교</string>
+    <string name="title_board">게시판</string>
+</resources>
