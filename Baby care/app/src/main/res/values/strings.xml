@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">유아 돌보미</string>
-    <string name="title_clothes">외출복 추천</string>
-    <string name="title_daily">데일리 이유식</string>
-    <string name="title_compare">유아 비교</string>
-    <string name="title_board">게시판</string>
+    <string name="titleClothes">외출복 추천</string>
+    <string name="titleDaily">데일리 이유식</string>
+    <string name="titleCompare">유아 비교</string>
+    <string name="titleBoard">게시판</string>
+    <string name="mainHome">안녕하세요 메인 홈이에요오오오오옹\n나중에에 여기에 사진을 올려야되요오오오</string>
 </resources>
