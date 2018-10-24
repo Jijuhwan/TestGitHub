@@ -1,13 +1,28 @@
 package Activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,109 +35,94 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
+public class loginActivity extends AppCompatActivity {
 
-    TextView tvData;
+    ViewFlipper Vf;
+    Button BtnSignIn, BtnSignUp;
+    EditText inputID, inputPW;
+    HttpPost httppost;
+    StringBuffer buffer;
+    HttpResponse response;
+    HttpClient httpclient;
+    List<NameValuePair> nameValuePairs;
+    ProgressDialog dialog = null;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
-        TextView tvData = (TextView) findViewById(R.id.textView);
-        Button btn = (Button)findViewById(R.id.httpTest);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-        //버튼이 클릭되면 여기 리스너로 옴
-        btn.setOnClickListener(new View.OnClickListener() {
+        BtnSignUp = (Button)findViewById(R.id.btnRegist);
+        BtnSignIn = (Button)findViewById(R.id.btnCancel);
+        inputID = (EditText)findViewById(R.id.etID);
+        inputPW = (EditText)findViewById(R.id.etPW);
+        tv = (TextView)findViewById(R.id.tv);
 
-
+        BtnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                new JSONTask().execute("http://192.168.1.65:3000/post");//AsyncTask 시작시킴
+            public void onClick(View v) {
+                dialog = ProgressDialog.show(loginActivity.this, "",
+                        "Validating user...", true);
+                new Thread(new Runnable() {
+                    public void run() {
+                        login();
+                    }
+                }).start();
             }
         });
     }
 
-    public class JSONTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("user_id", "androidTest");
-                jsonObject.accumulate("name", "yun");
-
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
-
-                try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
-                    URL url = new URL(urls[0]);
-                    //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
-
-                    con.setRequestMethod("POST");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
-                    con.connect();
-
-                    //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
-
-                    //서버로 부터 데이터를 받음
-                    InputStream stream = con.getInputStream();
-
-                    reader = new BufferedReader(new InputStreamReader(stream));
-
-                    StringBuffer buffer = new StringBuffer();
-
-                    String line = "";
-                    while((line = reader.readLine()) != null){
-                        buffer.append(line);
-                    }
-
-                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
-
-                } catch (MalformedURLException e){
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if(con != null){
-                        con.disconnect();
-                    }
-                    try {
-                        if(reader != null){
-                            reader.close();//버퍼를 닫아줌
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+    void login() {
+        try {
+            httpclient = new DefaultHttpClient();
+            httppost = new HttpPost("http://10.0.2.2/login.php");
+            nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("username", inputID.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("password", inputPW.getText().toString()));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            response = httpclient.execute(httppost);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            final String response = httpclient.execute(httppost, responseHandler);
+            System.out.println("Response : " + response);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv.setText("Response from PHP : " + response);
+                    dialog.dismiss();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            });
+
+            if (response.equalsIgnoreCase("User Found")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(loginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                startActivity((new Intent(loginActivity.this, registActivity.class)));
+                finish();
+            } else {
+                Toast.makeText(loginActivity.this, "Login Fail", Toast.LENGTH_SHORT).show();
             }
-
-            return null;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            tvData.setText(result);//서버로 부터 받은 값을 출력해주는 부
-            Log.e("String",result);
-
+        catch(Exception e)
+        {
+            dialog.dismiss();
+            System.out.println("Exception : " + e.getMessage());
         }
     }
 
+    public void CliSignUp(View view)
+    {
+        Intent intent = new Intent(this, registActivity.class);
+        startActivity(intent);
     }
+}

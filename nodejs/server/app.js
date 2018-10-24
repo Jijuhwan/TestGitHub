@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
 //server open
 const http = require('http');
  
-const hostname = '192.168.1.65';
+const hostname = 'localhost';
 const port = 3000;
  
 http.createServer((req, res) => {
@@ -54,5 +54,6 @@ http.createServer((req, res) => {
 app.listen(port, hostname, () => {
   console.log('Server Connected');
 });
+
 
 module.exports = app;

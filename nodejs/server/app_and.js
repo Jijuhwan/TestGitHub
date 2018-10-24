@@ -2,52 +2,69 @@ const express = require('express');
 const app = express();
 
 let users = [
+
   {
+
     id: 1,
-    name: 'alice'
+
+    name: 'WOW'
+
   },
+
   {
+
     id: 2,
-    name: 'bek'
+
+    name: 'GOOD'
+
   },
+
   {
+
     id: 3,
-    name: 'chris'
+
+    name: 'YEAH'
+
   }
+
 ]
 
 app.get('/users', (req, res) => {
+
    console.log('who get in here/users');
+
    res.json(users)
+
 });
 
 app.post('/post', (req, res) => {
+
    console.log('who get in here post /users');
+
    var inputData;
 
    req.on('data', (data) => {
+
      inputData = JSON.parse(data);
+
    });
 
    req.on('end', () => {
-     console.log("user_id : "+inputData.user_id + " , name : "+inputData.name);
+
+     console.log("user_id : " + inputData.user_id + " , name : " + inputData.name);
+
    });
 
-   res.write("OK!");
+   res.write("ok!");
+
    res.end();
+
 });
 
-const http = require('http');
- 
 const hostname = 'localhost';
 const port = 3000;
- 
-http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-})
 
 app.listen(port, hostname, () => {
   console.log('Server Connected');
 });
-
 module.exports = app;

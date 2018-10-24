@@ -7,38 +7,43 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    board fmBoard;
-    clothes fmClothes;
-    compare fmCompare;
-    daily fmDaily;
-    mainHome fmHome;
+    boardActivity fmBoard;
+    clothesActivity fmClothes;
+    compareActivity fmCompare;
+    dailyActivity fmDaily;
+    mainHomeActivity fmHome;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             //로그인 기록 정보 확인
-            int loginRecord = 1;
+            int loginRecord = 0;
             if(loginRecord==0) {
                 switch (item.getItemId()) {
                     case R.id.navigation_clothes:
-                        Intent login1 = new Intent(getApplicationContext(), LoginActivity.class);
+                        Intent login1 = new Intent(getApplicationContext(), loginActivity.class);
                         startActivity(login1);
                         return true;
                     case R.id.navigation_daily:
-                        Intent login2 = new Intent(getApplicationContext(), LoginActivity.class);
+                        Intent login2 = new Intent(getApplicationContext(), loginActivity.class);
                         startActivity(login2);
                         return true;
                     case R.id.navigation_compare:
-                        Intent login3 = new Intent(getApplicationContext(), LoginActivity.class);
+                        Intent login3 = new Intent(getApplicationContext(), loginActivity.class);
                         startActivity(login3);
                         return true;
                     case R.id.navigation_board:
-                        Intent login4 = new Intent(getApplicationContext(), LoginActivity.class);
+                        Intent login4 = new Intent(getApplicationContext(), loginActivity.class);
                         startActivity(login4);
                         return true;
                 }
@@ -79,17 +84,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fmBoard = new board();
-        fmClothes = new clothes();
-        fmCompare = new compare();
-        fmDaily = new daily();
-        fmHome = new mainHome();
-
+        fmBoard = new boardActivity();
+        fmClothes = new clothesActivity();
+        fmCompare = new compareActivity();
+        fmDaily = new dailyActivity();
+        fmHome = new mainHomeActivity();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentLayout,fmHome).commit();
-    }
 
+    }
 }
