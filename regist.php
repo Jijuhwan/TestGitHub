@@ -1,6 +1,6 @@
 <?php
 
-$con=mysqli_connect("192.168.1.75","home","1234","test");
+$con=mysqli_connect("192.168.1.48","home","","test");
 
 
 
