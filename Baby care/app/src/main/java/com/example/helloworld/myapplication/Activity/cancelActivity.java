@@ -1,4 +1,4 @@
-package Activity;
+package com.example.helloworld.myapplication.Activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import Activity.R;
 
 public class cancelActivity extends AppCompatActivity {
 

@@ -37,17 +37,6 @@ app.post('/post', (req, res) => {
    res.end();
 });
 
-const http = require('http');
- 
-const hostname = 'localhost';
-const port = 3000;
- 
-http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-})
-
-app.listen(port, hostname, () => {
-  console.log('Server Connected');
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
 });
-
-module.exports = app;

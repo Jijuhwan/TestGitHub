@@ -1,4 +1,4 @@
-package Activity;
+package com.example.helloworld.myapplication.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import Activity.R;
 
 public class clothesActivity extends Fragment {
     MainActivity activity;

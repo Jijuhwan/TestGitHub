@@ -1,4 +1,4 @@
-package Activity;
+package com.example.helloworld.myapplication.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import Activity.R;
 
 public class compareActivity extends Fragment{
     MainActivity activity;
