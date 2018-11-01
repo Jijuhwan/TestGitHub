@@ -1,4 +1,4 @@
-package com.example.helloworld.myapplication.Activity;
+package com.example.helloworld.myapplication.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,9 +25,9 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-import Activity.R;
+import com.example.helloworld.myapplication.R;
 
-public class loginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     ViewFlipper Vf;
     Button BtnSignIn, BtnSignUp;
@@ -43,7 +43,7 @@ public class loginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login_activity);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -57,7 +57,7 @@ public class loginActivity extends AppCompatActivity {
         BtnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = ProgressDialog.show(loginActivity.this, "",
+                dialog = ProgressDialog.show(LoginActivity.this, "",
                         "Validating user...", true);
                 new Thread(new Runnable() {
                     public void run() {
@@ -92,14 +92,14 @@ public class loginActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(loginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                     }
                 });
 
-                startActivity((new Intent(loginActivity.this, MainActivity.class)));
+                startActivity((new Intent(LoginActivity.this, MainActivity.class)));
                 finish();
             } else {
-                Toast.makeText(loginActivity.this, "Login Fail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Login Fail", Toast.LENGTH_SHORT).show();
             }
         }
         catch(Exception e)
@@ -111,7 +111,7 @@ public class loginActivity extends AppCompatActivity {
 
     public void CliSignUp(View view)
     {
-        Intent intent = new Intent(this, registActivity.class);
+        Intent intent = new Intent(this, RegistActivity.class);
         startActivity(intent);
     }
 }

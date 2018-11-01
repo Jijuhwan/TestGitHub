@@ -1,34 +1,17 @@
-package com.example.helloworld.myapplication.Activity;
+package com.example.helloworld.myapplication.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import org.json.JSONObject;
+import com.example.helloworld.myapplication.R;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import Activity.R;
-
-public class cancelActivity extends AppCompatActivity {
+public class CancelActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login_activity);
 
         Button btnRegist = (Button)findViewById(R.id.btnRegist);
         Button btnCancel = (Button)findViewById(R.id.btnCancel);

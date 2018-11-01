@@ -2,11 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이유식 추천 Fragment"/>
-
+    <CalendarView
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:minDate="01/01/2018"
+        android:maxDate="12/31/2020"
+        android:showWeekNumber="false"
+        android:theme="@style/CalendarViewTheme"
+        />
 </LinearLayout>

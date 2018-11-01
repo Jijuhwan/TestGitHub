@@ -1,4 +1,4 @@
-package com.example.helloworld.myapplication.Activity;
+package com.example.helloworld.myapplication.activity;
 
 
 import android.content.Context;
@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import Activity.R;
+import com.example.helloworld.myapplication.R;
 
-public class boardActivity extends Fragment {
+public class BoardActivity extends Fragment {
 
     MainActivity activity;
 

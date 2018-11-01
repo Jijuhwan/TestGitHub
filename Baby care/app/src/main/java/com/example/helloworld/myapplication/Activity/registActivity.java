@@ -1,4 +1,4 @@
-package com.example.helloworld.myapplication.Activity;
+package com.example.helloworld.myapplication.activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,10 +16,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import Activity.R;
+import com.example.helloworld.myapplication.R;
 
 
-public class registActivity extends AppCompatActivity {
+public class RegistActivity extends AppCompatActivity {
 
     private EditText editTextId;
     private EditText editTextPw;
@@ -28,7 +28,7 @@ public class registActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_regist);
+        setContentView(R.layout.login_regist);
 
         editTextId = (EditText) findViewById(R.id.etID);
         editTextPw = (EditText) findViewById(R.id.etPW);
@@ -46,7 +46,7 @@ public class registActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(registActivity.this, "Please Wait", null, true, true);
+                loading = ProgressDialog.show(RegistActivity.this, "Please Wait", null, true, true);
             }
             @Override
             protected void onPostExecute(String s) {
