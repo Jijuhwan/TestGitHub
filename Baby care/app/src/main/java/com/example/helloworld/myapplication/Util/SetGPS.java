@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 import com.example.helloworld.myapplication.R;
 
-public class RegistByeActivity extends AppCompatActivity {
+public class SetGPS extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.util_registbye);
+        setContentView(R.layout.util_setgps);
+
+
     }
 }

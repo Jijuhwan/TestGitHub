@@ -8,18 +8,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.helloworld.myapplication.R;
-import com.example.helloworld.myapplication.Util.LoginActivity;
+import com.example.helloworld.myapplication.fragment.BoardFragment;
+import com.example.helloworld.myapplication.fragment.ClothesFragment;
+import com.example.helloworld.myapplication.fragment.CompareFragment;
+import com.example.helloworld.myapplication.fragment.DailyFragment;
+import com.example.helloworld.myapplication.fragment.MainHomeFragment;
+import com.example.helloworld.myapplication.util.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static int LOGINRECORD = 0;
+    public static int LOGINRECORD = 1;
 
-    BoardActivity fmBoard;
-    ClothesActivity fmClothes;
-    CompareActivity fmCompare;
-    DailyActivity fmDaily;
-    MainHomeActivity fmHome;
+    BoardFragment fmBoard;
+    ClothesFragment fmClothes;
+    CompareFragment fmCompare;
+    DailyFragment fmDaily;
+    MainHomeFragment fmHome;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        fmBoard = new BoardActivity();
-        fmClothes = new ClothesActivity();
-        fmCompare = new CompareActivity();
-        fmDaily = new DailyActivity();
-        fmHome = new MainHomeActivity();
+        fmBoard = new BoardFragment();
+        fmClothes = new ClothesFragment();
+        fmCompare = new CompareFragment();
+        fmDaily = new DailyFragment();
+        fmHome = new MainHomeFragment();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

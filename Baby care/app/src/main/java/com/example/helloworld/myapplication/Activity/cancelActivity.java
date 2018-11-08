@@ -11,7 +11,7 @@ public class CancelActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.util_login);
 
         Button btnRegist = (Button)findViewById(R.id.btnRegist);
         Button btnCancel = (Button)findViewById(R.id.btnCancel);

@@ -1,4 +1,4 @@
-package com.example.helloworld.myapplication.Util;
+package com.example.helloworld.myapplication.util;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,7 +30,7 @@ public class RegistActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_regist);
+        setContentView(R.layout.util_regist);
 
         editTextId = (EditText) findViewById(R.id.etID);
         editTextPw = (EditText) findViewById(R.id.etPW);

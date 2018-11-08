@@ -3,6 +3,8 @@
     package="com.example.helloworld.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -20,10 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Util.LoginActivity" />
-        <activity android:name=".Util.RegistActivity" />
+        <activity android:name=".util.LoginActivity" />
+        <activity android:name=".util.RegistActivity" />
         <activity android:name=".activity.CancelActivity" />
-        <activity android:name=".Util.RegistByeActivity"></activity>
+        <activity android:name=".util.RegistByeActivity" />
+        <activity android:name=".util.SetGPS"></activity>
     </application>
 
 </manifest>
