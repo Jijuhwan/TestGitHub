@@ -19,12 +19,14 @@ public class WeatherInfo {
     String clouds_Sort;
     String clouds_Per;
 
+    String name;
+
     public WeatherInfo(String weather_Name, String weather_Number, String weather_Much,
                        String weather_Type, String wind_Direction, String wind_SortNumber,
                        String wind_SortCode, String wind_Speed, String wind_Name,
                        String temp_Min, String temp_Max, String humidity,
                        String clouds_Value, String clouds_Sort, String clouds_Per,
-                       String weather_Day_Go, String weather_Day_End )
+                       String weather_Day_Go, String weather_Day_End, String name )
     {
         this.weather_Name = weather_Name;
         this.weather_Number = weather_Number;
@@ -47,6 +49,7 @@ public class WeatherInfo {
         this.weather_Day_Go = weather_Day_Go;
         this.weather_Day_End = weather_Day_End;
 
+        this.name = name;
 
     }
 
@@ -89,6 +92,8 @@ public class WeatherInfo {
     public String getWeather_Day_Go() { return weather_Day_Go; }
 
     public String getWeather_Day_End() { return weather_Day_End; }
+
+    public String getname(){ return name; }
 
     public void setWeather_Name(String weather_Name) { this.weather_Name = weather_Name; }
 

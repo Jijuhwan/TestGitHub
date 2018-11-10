@@ -19,35 +19,79 @@
             android:background="@drawable/shape_list">
 
                 <ImageView
+                    android:id="@+id/ivCloud"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
                     android:src="@drawable/registbutton"
                     android:layout_gravity="center"
                     />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="현재 온도"
-                    android:layout_gravity="center"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="온도"
-                    android:layout_gravity="center"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="현재 비 유무"
-                    android:layout_gravity="center"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="비 유무"
-                    android:layout_gravity="center"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    >
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="현재 지역"
+                            />
+                        <TextView
+                            android:id="@+id/tvLocal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="지역을 적으세요."
+                            android:layout_gravity="center"
+                            />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    >
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="현재 온도"
+                            />
+                        <TextView
+                            android:id="@+id/tvTemp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="온도를 적으세요."
+                            android:layout_gravity="center"
+                            />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    >
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="현재 구름양"
+                            />
+                        <TextView
+                            android:id="@+id/tvCloud"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="구름량을 적으세요."
+                            android:layout_gravity="center"
+                            />
+                </LinearLayout>
 
         </LinearLayout>
 
@@ -60,15 +104,19 @@
             android:text="현재 미세먼지"
             android:background="@drawable/shape_list"
         />
-
-        <TextView
-            android:id="@+id/tvClothesData"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.7"
+            >
+        <TextView
+            android:id="@+id/tvClothesData"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="현재 옷차림 추천"
             android:background="@drawable/shape_list"
             />
+        </ScrollView>
 
         <TextView
             android:layout_width="match_parent"
