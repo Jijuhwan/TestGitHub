@@ -73,7 +73,7 @@ public class ClothesFragment extends Fragment {
         tvClothesData = (TextView)view.findViewById(R.id.tvClothesData);
         Initialize();
 
-        city = getArguments().getString("city");
+//        city = getArguments().getString("city");
 
         return view;
     }public void Initialize() {
