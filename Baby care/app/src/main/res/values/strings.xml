@@ -10,5 +10,5 @@
     <string name="lessgrowtext">우리아이는 평균보다\n조금 작아요</string>
     <string name="normalgrowtext">우리아이는 평균만큼\n잘 크고 있어요</string>
     <string name="moregrowtext">우리아이는 평균보다\n조금 커요</string>\
-    <string name="availablefood">개월수별 먹어도 되는 음식들</string>
+    <string name="availablefood">이번 달 부터 먹어도 되는 음식들</string>
 </resources>

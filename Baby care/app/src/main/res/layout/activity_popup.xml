@@ -3,17 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/popup"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
         android:background="#ffffff"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity=""
-            android:text="@string/availablefood"
-            android:textStyle="bold"/>
+        android:orientation="vertical"
+        android:gravity="center">
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/availablefood"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/availablefood"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="matrix"
+                android:visibility="visible"/>
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

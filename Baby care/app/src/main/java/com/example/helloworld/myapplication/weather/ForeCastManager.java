@@ -1,11 +1,7 @@
 package com.example.helloworld.myapplication.weather;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-
 import com.example.helloworld.myapplication.fragment.ClothesFragment;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -69,10 +65,10 @@ public class ForeCastManager extends Thread{
                 if(parserEvent == XmlPullParser.START_TAG  && parser.getName().equals("name")) {
                     city = parser.nextText();
 
-                    Fragment fragment = new ClothesFragment(); // Fragment 생성
-                    Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
-                    bundle.putString("city", city); // key , value
-                    fragment.setArguments(bundle);
+                    Bundle local = new Bundle();
+                     local.putString("city",city);
+                    //ClothesFragment에 접근하기 위해 ClothesFragment mContext 사용
+                    mContext.setArguments(local);
 
                 }
                 if(parserEvent == XmlPullParser.START_TAG  && parser.getName().equals("time")){
@@ -126,8 +122,6 @@ public class ForeCastManager extends Thread{
 
         return mTotalValue;
     }
-
-
 
     @Override
     public void run() {
