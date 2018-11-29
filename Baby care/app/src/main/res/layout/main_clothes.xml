@@ -4,50 +4,70 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ToggleButton
-        android:id="@+id/btnSetGPS"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:textOff="현재 위치 불러오기"
-        android:textOn="현재 위치 불러오는 중..." />
+        android:layout_weight="0.4"
+        android:background="@drawable/shape_list"   >
+        <Button
+            android:id="@+id/btnInformation"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앱 정보"
+            android:background="@drawable/shape_button" />
+
+        <Button
+            android:id="@+id/btnSetGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="현재 위치정보 불러오기"
+            android:background="@drawable/shape_button"
+
+            />
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="로그아웃"
+            android:background="@drawable/shape_button" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"     />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="@drawable/shape_list">
+            android:layout_weight="1.5"
+            android:orientation="vertical" >
 
                 <ImageView
                     android:id="@+id/ivCloud"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
-                    android:src="@drawable/registbutton"
-                    android:layout_gravity="center"
-                    android:clickable="true"
-                    android:onClick="refresh"
-                    />
-                <Button
-                    android:id="@+id/btnrefresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="새로고침"
-                    />
+                    android:layout_gravity="center"     />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="horizontal"
+                    android:background="@drawable/shape_box"
                     >
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="현재 지역"
+                            android:layout_gravity="center"
                             />
                         <TextView
                             android:id="@+id/tvLocal"
@@ -59,17 +79,25 @@
                             />
                 </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:orientation="horizontal"
+                    android:background="@drawable/shape_box"
+
                     >
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="현재 온도"
+                            android:layout_gravity="center"
                             />
                         <TextView
                             android:id="@+id/tvTemp"
@@ -81,17 +109,25 @@
                             />
                 </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="horizontal"
+                    android:background="@drawable/shape_box"
+
                     >
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="현재 구름양"
+                            android:text="현재 날씨"
+                            android:layout_gravity="center"
                             />
                         <TextView
                             android:id="@+id/tvCloud"
@@ -105,28 +141,48 @@
 
         </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"     />
 
-        <TextView
-            android:id="@+id/tvDustData"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:background="@drawable/shape_box"
+            >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="현재 미세먼지"
-            android:background="@drawable/shape_list"
-        />
+            android:gravity="center"    />
+
+        <TextView
+           android:id="@+id/tvDustData"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="0"
+           android:gravity="center"    />
+
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"     />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.7"
-            >
+            android:background="@drawable/shape_box"    >
                 <TextView
                     android:id="@+id/tvClothesData"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="현재 옷차림 추천"
-                    android:background="@drawable/shape_list"
-                    />
+                    android:text="현재 옷차림 추천"    />
         </ScrollView>
 
         <TextView

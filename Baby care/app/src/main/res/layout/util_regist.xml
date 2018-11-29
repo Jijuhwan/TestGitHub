@@ -37,7 +37,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.02"/>
+        android:layout_weight="0.02"
+        android:text="아이 정보를 입력해주세요.(소수점은 제외해주세요)"
+        android:layout_gravity="center"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,7 +52,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
-        android:hint="아이 키"
+        android:hint="키"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:background="@drawable/shape_list"   />
 
     <TextView
@@ -62,7 +68,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
-        android:hint="아이 몸무게"
+        android:hint="몸무게"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:background="@drawable/shape_list"   />
     </LinearLayout>
     <LinearLayout
@@ -108,8 +117,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_gravity="bottom"
-            android:hint="아이 머리둘레"
-            android:onClick="insert"
+            android:hint="머리둘레"
+            android:inputType="number"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:background="@drawable/shape_list"   />
 
         <TextView
@@ -123,7 +134,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_gravity="bottom"
-            android:text="아이 개월수"
+            android:inputType="number"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:hint="개월수 ex)180412"
             android:background="@drawable/shape_list"   />
     </LinearLayout>
     <TextView

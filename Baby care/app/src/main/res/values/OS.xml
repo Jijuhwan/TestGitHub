@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="os">
+        <item>날씨 API[openweather]</item>
+        <item>미세먼지 API[공공데이터포털]</item>
+        <item>포토 뷰</item>
+    </string-array>
+
+</resources>

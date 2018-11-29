@@ -14,7 +14,7 @@ public class CancelActivity extends AppCompatActivity {
         setContentView(R.layout.util_login);
 
         Button btnRegist = (Button)findViewById(R.id.btnRegist);
-        Button btnCancel = (Button)findViewById(R.id.btnCancel);
+        //Button btnCancel = (Button)findViewById(R.id.btnCancel);
 
 
 

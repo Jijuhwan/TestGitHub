@@ -28,6 +28,8 @@
         android:layout_weight="0.08"
         android:layout_gravity="center"
         android:hint="ID를 입력해주세요."
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:maxLength="20"
         android:background="@drawable/shape_list"
         android:focusable="true"
@@ -43,6 +45,8 @@
         android:layout_weight="0.08"
         android:layout_gravity="center"
         android:hint="PassWord를 입력해주세요."
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:layout_below="@id/etID"
         android:maxLength="20"
         android:background="@drawable/shape_list"   />

@@ -1,20 +1,25 @@
 package com.example.helloworld.myapplication.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +28,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.example.helloworld.myapplication.R;
 import com.example.helloworld.myapplication.activity.MainActivity;
@@ -35,38 +39,45 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class ClothesFragment extends Fragment {
     public static final int THREAD_HANDLER_SUCCESS_INFO = 1;
     MainActivity activity;
     ForeCastManager mForeCast;
+
     TextView tvLocal;
     TextView tvTemp;
     TextView tvCloud;
     ImageView ivCloud;
     TextView tvClothesData;
-    String city;
     TextView tvDustData;
     Button btnSetGPS;
-    Button btnrefresh;
 
     //날짜 변수
     long mNow;
     Date mDate;
-    SimpleDateFormat mFormat = new SimpleDateFormat("dd hh");
+    SimpleDateFormat mFormat = new SimpleDateFormat("dd HH");
     String nTime;
+    String day;
+    String time;
+    //현재 시간의 i 값
+    int ni = 1;
 
+    //설정할 GPS
     String Slat;
     String Slon;
+    //자신의 위치 받기
+    String city;
 
     //위치정보를 공급하는 근원
     String locationProvider;
     //위치 정보 매니져 객체
     LocationManager locationManager;
 
-    String longitude;
-    String latitude;
-    String lon = "126"; // 경도 설정
-    String lat = "37";  // 위도 설정
+    //기본 GPS설정
+    String lon = "2.212195"; // 경도 설정
+    String lat = "46.632954";  // 위도 설정
     ArrayList<ContentValues> mWeatherData;
     ArrayList<WeatherInfo> mWeatherInfomation;
     ClothesFragment mThis;
@@ -103,10 +114,9 @@ public class ClothesFragment extends Fragment {
 
         tvClothesData = (TextView) view.findViewById(R.id.tvClothesData);
 
-        btnrefresh = (Button) view.findViewById(R.id.btnrefresh);
-
-        final ToggleButton btnSetGPS = (ToggleButton) view.findViewById(R.id.btnSetGPS);
-        //SetGPS 이동
+        btnSetGPS = (Button) view.findViewById(R.id.btnSetGPS);
+        Button btnLogout = (Button) view.findViewById(R.id.btnLogout);
+        Button btnInformation = (Button) view.findViewById(R.id.btnInformation);
 
         // LocationManager 객체를 얻어온다
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -115,50 +125,82 @@ public class ClothesFragment extends Fragment {
         btnSetGPS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if ( Build.VERSION.SDK_INT >= 23 &&
+                        ContextCompat.checkSelfPermission( getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(
+                                getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED){
                     return;
                 }
-                try {
-                    if (btnSetGPS.isChecked()) {
-                        Toast.makeText(getContext(), "위치정보 수신중 . . .\nGPS를 켜주세요.", Toast.LENGTH_SHORT).show();
-                        // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
-                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
-                                1000, // 통지사이의 최소 시간간격 (miliSecond)
-                                0, // 통지사이의 최소 변경거리 (m)
-                                mLocationListener);
-                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
-                                1000, // 통지사이의 최소 시간간격 (miliSecond)
-                                0, // 통지사이의 최소 변경거리 (m)
-                                mLocationListener);
 
-                    } else {
-                        Toast.makeText(getContext(), "위치정보 미수신", Toast.LENGTH_SHORT).show();
-                        lm.removeUpdates(mLocationListener);  //  미수신할때는 반드시 자원해체를 해주어야 한다.
-                    }
-                } catch (SecurityException ex) {
+                // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
                 }
 
-                if(lon == "127" && lat == "36")
-                {
-                    Toast.makeText(getContext(), "위치정보 수신중를\n 수신중 입니다.", Toast.LENGTH_SHORT).show();
-                }else{
-                    lon = Slon;
-                    lat = Slat;
+                Toast.makeText(getContext(),"위치 정보를 받는 중입니다.",Toast.LENGTH_SHORT).show();
 
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.detach(mThis).attach(mThis).commit();
+                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+                        1000, // 통지사이의 최소 시간간격 (miliSecond)
+                        0, // 통지사이의 최소 변경거리 (m)
+                        mLocationListener);
+
+                //위치정보 받을 대기시간
+                Handler mHandler = new Handler();
+                mHandler.postDelayed(new Runnable()  {
+                    public void run() {
+
+                        Toast.makeText(getContext(),"위치 정보를 갱신하였습니다.",Toast.LENGTH_SHORT).show();
+
+                        lon = Slon;
+                        lat = Slat;
+
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(mThis).attach(mThis).commit();
+
+                        lm.removeUpdates(mLocationListener);  //  미수신할때는 반드시 자원해체를 해주어야 한다.
+
+                    }
+                }, 10000);
+            }
+        });
+
+        //로그아웃 버튼
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(MainActivity.LOGINRECORD == 1)
+                {
+                    Toast.makeText(getActivity(), "로그아웃이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    MainActivity.LOGINRECORD = 0;
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             }
         });
 
+        //앱 정보 버튼
+        btnInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context mContext = getContext();
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+                View layout = inflater.inflate(R.layout.activity_information, (ViewGroup) v.findViewById(R.id.Information));
+                AlertDialog.Builder aDialog = new AlertDialog.Builder(getContext());
+
+                aDialog.setTitle("오픈소스 라이선스");
+                aDialog.setView(layout);
+
+                AlertDialog ad = aDialog.create();
+                ad.show();
+            }
+        });
+
+        //초기화 메소드
         Initialize();
+        //시간 받는 메소드
         getTime();
 
         return view;
@@ -178,11 +220,11 @@ public class ClothesFragment extends Fragment {
         mDate = new Date(mNow);
         nTime = mFormat.format(mDate);
 
+        day = nTime.split(" ")[0];
+        time = nTime.split(" ")[1];
+
         tvDustData.setText(nTime);
-      //  if(nTime.equals(mWeatherInfomation.get(1).getWeather_Day_Go()))
-       // for(int i=0; i < mWeatherInfomation.size(); i++)
-        //{
-        //}
+
     }
     //지역 출력 메소드
     public String LocalPrint(){
@@ -202,14 +244,16 @@ public class ClothesFragment extends Fragment {
     //온도 출력 메소드
     public String TempPrint(){
         String TempData = "";
-        TempData =  "최대 기온 : " + mWeatherInfomation.get(1).getTemp_Max() + "\n"+
-                    "최저 기온 : " + mWeatherInfomation.get(1).getTemp_Min();
+        TempData =  "최대 기온 : " + mWeatherInfomation.get(ni).getTemp_Max() + "\n"+
+                    "최저 기온 : " + mWeatherInfomation.get(ni).getTemp_Min();
         return TempData;
     }
     //구름량 출력 메소드
     public String CloudPrint(){
         String CloudData = "";
-        CloudData =  mWeatherInfomation.get(1).getClouds_Value() + "%";
+
+        CloudData =   mWeatherInfomation.get(ni).getWeather_Name();
+
         return CloudData;
     }
 
@@ -219,7 +263,6 @@ public class ClothesFragment extends Fragment {
             mData = mData + mWeatherInfomation.get(i).getWeather_Day_Go() + "\r\n"
                     + mWeatherInfomation.get(i).getWeather_Day_End() + "\r\n"
                     + mWeatherInfomation.get(i).getWeather_Name() + "\r\n"
-                    + mWeatherInfomation.get(i).getClouds_Sort() + "\r\n"
                     + "구름 양 : " + mWeatherInfomation.get(i).getClouds_Value()
                     + mWeatherInfomation.get(i).getClouds_Per() + "\r\n"
                     + mWeatherInfomation.get(i).getWind_Name() + "\r\n"
@@ -227,13 +270,108 @@ public class ClothesFragment extends Fragment {
                     + "최대 기온 : " + mWeatherInfomation.get(i).getTemp_Max() + "℃" + "\r\n"
                     + "최저 기온: " + mWeatherInfomation.get(i).getTemp_Min() + "℃" + "\r\n"
                     + "습도: " + mWeatherInfomation.get(i).getHumidity() + "%" + "\r\n"
-                    + "지역: " + city;
-            ;
-                    //+ "i의 크기 : " + mWeatherInfomation.get(i).getCity();
+                    + "지역: " + city
+                    + "i의 크기 : " + i ;
 
             mData = mData + "\r\n" + "----------------------------------------------" + "\r\n";
         }
         return mData;
+    }
+
+    public String Now(){
+        String now = "";
+        //오늘 요일
+        String nday = "";
+        //오늘 시간
+        String ntime0 = "";
+        String ntime1 = "";
+        String ntime2 = "";
+        int ntime3 = 0;
+        int ntime4 = 0;
+        int a = 0;
+        int b = 0;
+
+        for(int i =0; i <mWeatherInfomation.size(); i++){
+            //now = 요일이 나온다.
+            ntime0 = mWeatherInfomation.get(i).getWeather_Day_End().split("T")[0];
+            nday = ntime0.split("-")[2];
+            ntime1 = mWeatherInfomation.get(i).getWeather_Day_End().split("T")[1];
+            ntime2 = ntime1.split(":")[0];
+            ntime3 = Integer.parseInt(ntime2);
+            ntime4 = Integer.parseInt(time);
+
+            if(nday.contains(day) && b == 0)
+            {
+                //i값마다 nday가 하나씩 증가
+                //now = now + mWeatherInfomation.get(i).getWeather_Day_End() + "\r\n";
+
+                a = 1;
+
+                //now = now + "\r\n" + "----------------------------------------------" + "\r\n";
+            }
+            //0,1,2 - 3,4,5 - 6,7,8 - 9,10,11 - 12,13,14 - 15,16,17 - 18,19,20 - 21,22,23
+            //0~3시
+            if(ntime4 >= 0 && ntime3 == 3 && a == 1 && ntime4 <= ntime3)
+            {
+                //현재의 i 값을 ni에 저장
+                ni = i;
+                a = 0;
+                b =  1;
+            }
+            //3~6시
+            else if(ntime4 >= 3 && ntime3 == 6 && a == 1 && ntime4 <= ntime3)
+            {
+                ni = i;
+                a = 0;
+                b =  1;
+            }
+            //6~9시
+            else if(ntime4 >= 6 && ntime3 == 9 && a == 1 && ntime4 <= ntime3)
+            {
+                ni = i;
+                a = 0;
+                b = 1;
+            }
+            //9~12시
+            else if(ntime4 >= 9 && ntime3 == 12 && a == 1 && ntime4 <= ntime3)
+            {
+                ni = i;
+                a = 0;
+                b =  1;
+            }
+            //12~15시
+            else if(ntime4 >= 12 && ntime3 == 15 && a == 1 && ntime4 <= ntime3)
+            {
+                ni = i;
+                a = 0;
+                b =  1;
+            }
+            //15~18시
+            else if(ntime4 >= 15 && ntime3 == 18 && a == 1 && ntime4 <= ntime3)
+            {
+                ni = i;
+                a = 0;
+                b = 1;
+            }
+            //18~21시
+            else if(ntime4 >= 18 && ntime3 == 21 && a == 1 && ntime4 <= ntime3)
+            {
+                ni = i;
+                a = 0;
+                b =  1;
+            }
+            //21~24시
+            else if(ntime4 >= 21 && ntime3 == 0 && a == 1)
+            {
+                ni = i;
+                a = 0;
+                b =  1;
+            }
+
+
+        }
+        now =  now + mWeatherInfomation.get(ni).getWeather_Day_End() + "\r\n";
+        return now;
     }
 
     public void DataChangedToHangeul() {
@@ -277,20 +415,35 @@ public class ClothesFragment extends Fragment {
                     String localData = "";
                     String tempData = "";
                     String cloudData = "";
-                    String print="";
+                    String now="";
 
                     DataChangedToHangeul();
 
                     localData = localData + LocalPrint();
                     tempData = tempData + TempPrint();
                     cloudData = cloudData + CloudPrint();
-                    print = print + PrintValue();
+                    now = now + Now();
 
                     tvLocal.setText(localData);
                     tvTemp.setText(tempData);
                     tvCloud.setText(cloudData);
-                    tvClothesData.setText(print);
+                    tvClothesData.setText(now);
 
+                    if(cloudData.contains("하늘")) {
+                        ivCloud.setImageResource(R.drawable.sun);
+                    }else if(cloudData.contains("비") || !cloudData.contains("번개")){
+                        ivCloud.setImageResource(R.drawable.rain);
+                    }else if(cloudData.contains("소나기")) {
+                        ivCloud.setImageResource(R.drawable.rain);
+                    }else if(cloudData.contains("흐림")) {
+                        ivCloud.setImageResource(R.drawable.cloud);
+                    }else if(cloudData.contains("번개") || cloudData.contains("천둥")) {
+                        ivCloud.setImageResource(R.drawable.flash);
+                    }else if(cloudData.contains("눈")) {
+                        ivCloud.setImageResource(R.drawable.snow);
+                    }else{
+                        ivCloud.setImageResource(R.drawable.questionsign);
+                    }
                     break;
                 default:
                     break;
@@ -304,30 +457,43 @@ public class ClothesFragment extends Fragment {
             //여기서 위치값이 갱신되면 이벤트가 발생한다.
             //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
 
-            Log.d("test", "onLocationChanged, location:" + location);
-            double lon = location.getLongitude(); //경도
-            double lat = location.getLatitude();   //위도
+            double updateLon = location.getLongitude(); //경도
+            double updateLat = location.getLatitude();   //위도
 
-            Toast.makeText(getContext(),"위치 정보를 받았습니다.",Toast.LENGTH_SHORT);
+            Slat = String.valueOf(updateLat);
+            Slon = String.valueOf(updateLon);
 
-            Slat = String.valueOf(lat);
-            Slon = String.valueOf(lon);
         }
 
-        public void onProviderDisabled(String provider) {
-            // Disabled시
-            Log.d("test", "onProviderDisabled, provider:" + provider);
+        public void onStatusChanged(String provider, int i, Bundle bundle) {
+            alterStatus(provider);
         }
 
         public void onProviderEnabled(String provider) {
-            // Enabled시
-            Log.d("test", "onProviderEnabled, provider:" + provider);
+            alterProvider(provider);
         }
 
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // 변경시
-            Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
+
+        public void onProviderDisabled(String provider) {
+            checkProvider(provider);
         }
     };
+
+    public void checkProvider(String provider){
+        Toast.makeText(getContext(),provider + "를 켜주세요.",Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
+
+    public void alterProvider(String provider)
+    {
+        Toast.makeText(getContext(),provider + "가 켜졌습니다.",Toast.LENGTH_SHORT).show();
+    }
+
+    public void alterStatus(String provider)
+    {
+        Toast.makeText(getContext(),"위치서비스가 "+provider+"로 변경되었습니다.",Toast.LENGTH_SHORT).show();
+    }
 
 }

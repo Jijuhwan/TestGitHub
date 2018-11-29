@@ -1,5 +1,6 @@
 package com.example.helloworld.myapplication.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import com.example.helloworld.myapplication.util.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    //로그인 정보
     public static int LOGINRECORD = 1;
 
     BoardFragment fmBoard;
@@ -37,23 +39,28 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            //로그인 기록 정보 확인
+
+            //로그인 기록 정보 확인(비회원)
             if(LOGINRECORD==0) {
                 switch (item.getItemId()) {
                     case R.id.navigation_clothes:
                         Intent login1 = new Intent(getApplicationContext(), LoginActivity.class);
+                        login1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(login1);
                         return true;
                     case R.id.navigation_daily:
                         Intent login2 = new Intent(getApplicationContext(), LoginActivity.class);
+                        login2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(login2);
                         return true;
                     case R.id.navigation_compare:
                         Intent login3 = new Intent(getApplicationContext(), LoginActivity.class);
+                        login3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(login3);
                         return true;
                     case R.id.navigation_board:
                         Intent login4 = new Intent(getApplicationContext(), LoginActivity.class);
+                        login4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(login4);
                         return true;
                 }
@@ -104,10 +111,19 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentLayout,fmHome).commit();
 
+        //GPS 사용 권한 동의
         if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
-                    0 );
+                ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            return;
         }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
     }
 }

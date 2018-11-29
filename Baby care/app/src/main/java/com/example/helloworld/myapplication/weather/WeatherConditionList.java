@@ -109,8 +109,8 @@ public class WeatherConditionList {
         mListRainToHangeul.add(new WeatherCondition("500","가벼운 비"));
         mListRainToHangeul.add(new WeatherCondition("501","비"));
         mListRainToHangeul.add(new WeatherCondition("502","강한 비"));
-        mListRainToHangeul.add(new WeatherCondition("503","집중 호우"));
-        mListRainToHangeul.add(new WeatherCondition("504","집중 호우"));
+        mListRainToHangeul.add(new WeatherCondition("503","집중 비"));
+        mListRainToHangeul.add(new WeatherCondition("504","집중 비"));
         mListSnowToHangeul.add(new WeatherCondition("511","어는 비"));
         mListShower_RainToHangeul.add(new WeatherCondition("520","가벼운 소나기"));
         mListShower_RainToHangeul.add(new WeatherCondition("521","소나기"));
@@ -170,9 +170,9 @@ public class WeatherConditionList {
         mListBroken_Clouds.add(new WeatherCondition("804","overcast clouds"));
 
         mListClearSkyToHangeul.add(new WeatherCondition("800","맑은 하늘"));
-        mListFew_CloudsToHangeul.add(new WeatherCondition("801","구름 조금"));
-        mListScattered_CloudsToHangeul.add(new WeatherCondition("802","조각 구름"));
-        mListBroken_CloudsToHangeul.add(new WeatherCondition("803","조각 구름"));
+        mListFew_CloudsToHangeul.add(new WeatherCondition("801","구름 하늘"));
+        mListScattered_CloudsToHangeul.add(new WeatherCondition("802","조각 하늘"));
+        mListBroken_CloudsToHangeul.add(new WeatherCondition("803","조각 하늘"));
         mListBroken_CloudsToHangeul.add(new WeatherCondition("804","흐림"));
 
         //-----------------Additional----------//

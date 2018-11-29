@@ -25,6 +25,10 @@ public class RegistActivity extends AppCompatActivity {
 
     private EditText editTextId;
     private EditText editTextPw;
+    private EditText editTextHead;
+    private EditText editTextHeight;
+    private EditText editTextMonth;
+    private EditText editTextWeight;
 
 
     @Override
@@ -34,15 +38,25 @@ public class RegistActivity extends AppCompatActivity {
 
         editTextId = (EditText) findViewById(R.id.etID);
         editTextPw = (EditText) findViewById(R.id.etPW);
+        editTextHead = (EditText)findViewById(R.id.etHead);
+        editTextHeight = (EditText)findViewById(R.id.etHeight);
+        editTextMonth = (EditText)findViewById(R.id.etMonth);
+        editTextWeight = (EditText)findViewById(R.id.etWeight);
 
     }
     public void insert(View view) {
         String Id = editTextId.getText().toString();
         String Pw = editTextPw.getText().toString();
+        String Head = editTextHead.getText().toString();
+        String Height = editTextHeight.getText().toString();
+        String Month = editTextMonth.getText().toString();
+        String Weight = editTextWeight.getText().toString();
 
-        insertoToDatabase(Id, Pw);
+        insertoToDatabase(Id, Pw, Head, Height, Month, Weight);
     }
-    private void insertoToDatabase(String Id, String Pw) {
+    private void insertoToDatabase(String Id, String Pw, String Head, String Height,
+                                   String Month ,String Weight) {
+
         class InsertData extends AsyncTask<String, Void, String> {
             ProgressDialog loading;
             @Override
@@ -62,10 +76,18 @@ public class RegistActivity extends AppCompatActivity {
                 try {
                     String Id = (String) params[0];
                     String Pw = (String) params[1];
+                    String Head = (String) params[2];
+                    String Height = (String) params[3];
+                    String Month = (String) params[4];
+                    String Weight = (String) params[5];
 
-                    String link = "http://192.168.1.48/regist.php";
+                    String link = "http://otl9882.codns.com:443/regist.php";
                     String data = URLEncoder.encode("Id", "UTF-8") + "=" + URLEncoder.encode(Id, "UTF-8");
                     data += "&" + URLEncoder.encode("Pw", "UTF-8") + "=" + URLEncoder.encode(Pw, "UTF-8");
+                    data += "&" + URLEncoder.encode("Head", "UTF-8") + "=" + URLEncoder.encode(Head, "UTF-8");
+                    data += "&" + URLEncoder.encode("Height", "UTF-8") + "=" + URLEncoder.encode(Height, "UTF-8");
+                    data += "&" + URLEncoder.encode("Month", "UTF-8") + "=" + URLEncoder.encode(Month, "UTF-8");
+                    data += "&" + URLEncoder.encode("Weight", "UTF-8") + "=" + URLEncoder.encode(Weight, "UTF-8");
 
                     URL url = new URL(link);
                     URLConnection conn = url.openConnection();
@@ -93,7 +115,10 @@ public class RegistActivity extends AppCompatActivity {
             }
         }
         InsertData task = new InsertData();
-        task.execute(Id, Pw);
+        task.execute(Id, Pw, Head, Height, Month, Weight);
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     public void signNo(View view)
