@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     >
     <TextView
         android:layout_width="wrap_content"
@@ -26,12 +28,13 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="0.08"
+        android:paddingLeft="15dp"
         android:layout_gravity="center"
         android:hint="ID를 입력해주세요."
         android:singleLine="true"
-        android:imeOptions="actionDone"
+        android:nextFocusDown="@id/etPW"
         android:maxLength="20"
-        android:background="@drawable/shape_list"
+        android:background="@drawable/shape_edit"
         android:focusable="true"
         />
     <TextView
@@ -43,13 +46,14 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="0.08"
+        android:paddingLeft="15dp"
         android:layout_gravity="center"
         android:hint="PassWord를 입력해주세요."
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:layout_below="@id/etID"
         android:maxLength="20"
-        android:background="@drawable/shape_list"   />
+        android:background="@drawable/shape_edit"   />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"

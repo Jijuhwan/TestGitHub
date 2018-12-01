@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"  >
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,11 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="0.03"
+        android:paddingLeft="15dp"
         android:layout_gravity="center"
         android:hint="ID를 입력해주세요."
+        android:singleLine="true"
         android:maxLength="20"
-        android:background="@drawable/shape_list"
         android:focusable="true"
+        android:nextFocusDown="@id/etPW"
+        android:background="@drawable/shape_edit"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -29,11 +35,14 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="0.03"
+        android:paddingLeft="15dp"
         android:layout_gravity="center"
         android:hint="PassWord를 입력해주세요."
+        android:singleLine="true"
         android:layout_below="@id/etID"
+        android:nextFocusDown="@id/etHeight"
         android:maxLength="20"
-        android:background="@drawable/shape_list"   />
+        android:background="@drawable/shape_edit"   />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -52,11 +61,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:paddingLeft="15dp"
         android:hint="키"
         android:inputType="number"
         android:singleLine="true"
-        android:imeOptions="actionDone"
-        android:background="@drawable/shape_list"   />
+        android:nextFocusDown="@id/etWeight"
+        android:background="@drawable/shape_edit"
+        />
 
     <TextView
         android:layout_width="0dp"
@@ -68,43 +79,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:paddingLeft="15dp"
         android:hint="몸무게"
         android:inputType="number"
         android:singleLine="true"
-        android:imeOptions="actionDone"
-        android:background="@drawable/shape_list"   />
+        android:nextFocusDown="@id/etHead"
+        android:background="@drawable/shape_edit"
+        />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.03"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        >
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            />
-        <CheckBox
-            android:text="남자 아이"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        <CheckBox
-            android:text="여자 아이"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -116,12 +99,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:layout_gravity="bottom"
+            android:paddingLeft="15dp"
             android:hint="머리둘레"
             android:inputType="number"
             android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:background="@drawable/shape_list"   />
+            android:nextFocusDown="@id/etMonth"
+            android:background="@drawable/shape_edit"
+            />
 
         <TextView
             android:layout_width="0dp"
@@ -133,13 +117,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:layout_gravity="bottom"
+            android:paddingLeft="7dp"
             android:inputType="number"
             android:singleLine="true"
             android:imeOptions="actionDone"
-            android:hint="개월수 ex)180412"
-            android:background="@drawable/shape_list"   />
+            android:hint="아이 생년월 ex)1804"
+            android:background="@drawable/shape_edit"
+            />
     </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.03"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_edit"
+        >
+
+        <RadioButton
+            android:id="@+id/rbm"
+            android:text="남자 아이"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+        <RadioButton
+            android:id="@+id/rbg"
+            android:text="여자 아이"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+    </RadioGroup>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"

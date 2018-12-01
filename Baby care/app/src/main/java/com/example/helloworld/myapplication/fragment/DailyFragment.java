@@ -22,12 +22,17 @@ import com.example.helloworld.myapplication.activity.MainActivity;
 import com.example.helloworld.myapplication.util.PopUpActivity;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
 public class DailyFragment extends Fragment {
     MainActivity activity;
-    int babymonth = 12; //엄마가 입력한 아기 개월 수
+
+    public static String sbabymonth; //엄마가 입력한 아기 개월 수
+    int babymonth;
 
     @Override
     public void onAttach(Context context){
@@ -53,8 +58,21 @@ public class DailyFragment extends Fragment {
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                String StrDay = year+"."+(month+1)+"."+dayOfMonth;
+            public void onSelectedDayChange(CalendarView view, int inyear, int inmonth, int dayOfMonth) {
+
+                String sYear = sbabymonth.substring(0,2); //입력한 년
+                String sMonth = sbabymonth.substring(2,4);//입력한 달
+
+                int iyear = Integer.parseInt(sYear); //입력한 년 int
+                int imonth = Integer.parseInt(sMonth); //입력한 달 int
+
+
+                inyear =inyear - 2000;
+                int year = inyear - iyear;
+                int month = inmonth - imonth;
+
+                babymonth = (year*12) + month;
+
                 if(babymonth < 4)
                 {
                     Toast.makeText(getContext(), "오늘의 이유식 : 모유, 분유", Toast.LENGTH_SHORT).show();
@@ -1109,4 +1127,5 @@ public class DailyFragment extends Fragment {
 
         return view;
     }
+
 }

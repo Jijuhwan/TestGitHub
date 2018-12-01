@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.helloworld.myapplication.R;
 import com.example.helloworld.myapplication.fragment.BoardFragment;
@@ -22,11 +23,16 @@ import com.example.helloworld.myapplication.fragment.DailyFragment;
 import com.example.helloworld.myapplication.fragment.MainHomeFragment;
 import com.example.helloworld.myapplication.util.LoginActivity;
 
+import java.security.Permission;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+
 
 public class MainActivity extends AppCompatActivity {
 
     //로그인 정보
-    public static int LOGINRECORD = 1;
+    public static int LOGINRECORD = 0;
+    private final int PERMISSIONS_REQUEST_RESULT = 1;
 
     BoardFragment fmBoard;
     ClothesFragment fmClothes;
@@ -101,29 +107,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //권한을 거절하면 재 요청을 하는 함수
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_RESULT);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_RESULT);
+            }
+        }
+
         fmBoard = new BoardFragment();
         fmClothes = new ClothesFragment();
         fmCompare = new CompareFragment();
         fmDaily = new DailyFragment();
         fmHome = new MainHomeFragment();
 
+
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentLayout,fmHome).commit();
 
-        //GPS 사용 권한 동의
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(
-                        this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (PERMISSIONS_REQUEST_RESULT == requestCode) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "권한 요청이 됐습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "권한 요청을 해주세요.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
             return;
         }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
     }
 }

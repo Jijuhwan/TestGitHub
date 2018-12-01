@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,13 +33,18 @@ import android.widget.Toast;
 
 import com.example.helloworld.myapplication.R;
 import com.example.helloworld.myapplication.activity.MainActivity;
+import com.example.helloworld.myapplication.weather.Dust;
 import com.example.helloworld.myapplication.weather.ForeCastManager;
 import com.example.helloworld.myapplication.weather.WeatherInfo;
 import com.example.helloworld.myapplication.weather.WeatherToHangeul;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -50,7 +57,8 @@ public class ClothesFragment extends Fragment {
     TextView tvTemp;
     TextView tvCloud;
     ImageView ivCloud;
-    TextView tvClothesData;
+    ImageView ivClothesData;
+    TextView tvClothes;
     TextView tvDustData;
     Button btnSetGPS;
 
@@ -65,19 +73,21 @@ public class ClothesFragment extends Fragment {
     int ni = 1;
 
     //설정할 GPS
-    String Slat;
-    String Slon;
+    public static String Slat;
+    public static String Slon;
     //자신의 위치 받기
-    String city;
+    //String city;
 
     //위치정보를 공급하는 근원
     String locationProvider;
     //위치 정보 매니져 객체
     LocationManager locationManager;
 
+    String sDust;
+
     //기본 GPS설정
-    String lon = "2.212195"; // 경도 설정
-    String lat = "46.632954";  // 위도 설정
+    String lon = "126.969630"; // 경도 설정
+    String lat =  "37.553794"; // 위도 설정
     ArrayList<ContentValues> mWeatherData;
     ArrayList<WeatherInfo> mWeatherInfomation;
     ClothesFragment mThis;
@@ -111,12 +121,27 @@ public class ClothesFragment extends Fragment {
         ivCloud = (ImageView) view.findViewById(R.id.ivCloud);
         //미세먼지
         tvDustData = (TextView) view.findViewById(R.id.tvDustData);
-
-        tvClothesData = (TextView) view.findViewById(R.id.tvClothesData);
+        //외출복
+        ivClothesData = (ImageView) view.findViewById(R.id.ivClothesData);
+        tvClothes = (TextView)view.findViewById(R.id.tvCloethesText);
 
         btnSetGPS = (Button) view.findViewById(R.id.btnSetGPS);
         Button btnLogout = (Button) view.findViewById(R.id.btnLogout);
         Button btnInformation = (Button) view.findViewById(R.id.btnInformation);
+
+        sDust = "미세먼지 정보가 없습니다.";
+
+        try{
+            sDust = new Dust().execute().get();
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        tvDustData.setText(sDust);
 
         // LocationManager 객체를 얻어온다
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -155,6 +180,16 @@ public class ClothesFragment extends Fragment {
 
                         lon = Slon;
                         lat = Slat;
+
+                        try{
+                            sDust = new Dust().execute().get();
+                        }catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.detach(mThis).attach(mThis).commit();
@@ -223,18 +258,22 @@ public class ClothesFragment extends Fragment {
         day = nTime.split(" ")[0];
         time = nTime.split(" ")[1];
 
-        tvDustData.setText(nTime);
-
     }
     //지역 출력 메소드
     public String LocalPrint(){
         String LocalData = "";
 
-        Bundle bundle = getArguments();
+        /*Bundle bundle = getArguments();
         if(bundle != null )
         {
             city = bundle.getString("city");
             LocalData = city;
+        }*/
+
+        if(Dust.city ==  null){
+            LocalData = "Seoul";
+        }else{
+            LocalData = Dust.city;
         }
 
         return LocalData;
@@ -248,13 +287,21 @@ public class ClothesFragment extends Fragment {
                     "최저 기온 : " + mWeatherInfomation.get(ni).getTemp_Min();
         return TempData;
     }
-    //구름량 출력 메소드
+    //현재 날씨 출력 메소드
     public String CloudPrint(){
         String CloudData = "";
 
         CloudData =   mWeatherInfomation.get(ni).getWeather_Name();
 
         return CloudData;
+    }
+
+    //평균 온도 출력 메소드
+    public double AvgTempPrint(){
+
+        Double AvgTemp = 0.0;
+        AvgTemp =   (Double.parseDouble(mWeatherInfomation.get(ni).getTemp_Max()) + Double.parseDouble(mWeatherInfomation.get(ni).getTemp_Min()))/2;
+        return AvgTemp;
     }
 
     public String PrintValue() {
@@ -270,7 +317,7 @@ public class ClothesFragment extends Fragment {
                     + "최대 기온 : " + mWeatherInfomation.get(i).getTemp_Max() + "℃" + "\r\n"
                     + "최저 기온: " + mWeatherInfomation.get(i).getTemp_Min() + "℃" + "\r\n"
                     + "습도: " + mWeatherInfomation.get(i).getHumidity() + "%" + "\r\n"
-                    + "지역: " + city
+                    + "지역: " + Dust.city
                     + "i의 크기 : " + i ;
 
             mData = mData + "\r\n" + "----------------------------------------------" + "\r\n";
@@ -283,22 +330,24 @@ public class ClothesFragment extends Fragment {
         //오늘 요일
         String nday = "";
         //오늘 시간
-        String ntime0 = "";
+        String temp = "";
         String ntime1 = "";
         String ntime2 = "";
-        int ntime3 = 0;
-        int ntime4 = 0;
+        int ptime = 0;
+        int ntime = 0;
         int a = 0;
         int b = 0;
 
         for(int i =0; i <mWeatherInfomation.size(); i++){
             //now = 요일이 나온다.
-            ntime0 = mWeatherInfomation.get(i).getWeather_Day_End().split("T")[0];
-            nday = ntime0.split("-")[2];
+            temp = mWeatherInfomation.get(i).getWeather_Day_End().split("T")[0];
+            nday = temp.split("-")[2];
             ntime1 = mWeatherInfomation.get(i).getWeather_Day_End().split("T")[1];
             ntime2 = ntime1.split(":")[0];
-            ntime3 = Integer.parseInt(ntime2);
-            ntime4 = Integer.parseInt(time);
+            //파싱 time
+            ptime = Integer.parseInt(ntime2);
+            //현재 time
+            ntime = Integer.parseInt(time);
 
             if(nday.contains(day) && b == 0)
             {
@@ -311,7 +360,7 @@ public class ClothesFragment extends Fragment {
             }
             //0,1,2 - 3,4,5 - 6,7,8 - 9,10,11 - 12,13,14 - 15,16,17 - 18,19,20 - 21,22,23
             //0~3시
-            if(ntime4 >= 0 && ntime3 == 3 && a == 1 && ntime4 <= ntime3)
+            if(ntime >= 0 && ptime == 3 && a == 1 && ntime <= ptime)
             {
                 //현재의 i 값을 ni에 저장
                 ni = i;
@@ -319,49 +368,49 @@ public class ClothesFragment extends Fragment {
                 b =  1;
             }
             //3~6시
-            else if(ntime4 >= 3 && ntime3 == 6 && a == 1 && ntime4 <= ntime3)
+            else if(ntime >= 3 && ptime == 6 && a == 1 && ntime <= ptime)
             {
                 ni = i;
                 a = 0;
                 b =  1;
             }
             //6~9시
-            else if(ntime4 >= 6 && ntime3 == 9 && a == 1 && ntime4 <= ntime3)
+            else if(ntime >= 6 && ptime == 9 && a == 1 && ntime <= ptime)
             {
                 ni = i;
                 a = 0;
                 b = 1;
             }
             //9~12시
-            else if(ntime4 >= 9 && ntime3 == 12 && a == 1 && ntime4 <= ntime3)
+            else if(ntime >= 9 && ptime == 12 && a == 1 && ntime <= ptime)
             {
                 ni = i;
                 a = 0;
                 b =  1;
             }
             //12~15시
-            else if(ntime4 >= 12 && ntime3 == 15 && a == 1 && ntime4 <= ntime3)
+            else if(ntime >= 12 && ptime == 15 && a == 1 && ntime <= ptime)
             {
                 ni = i;
                 a = 0;
                 b =  1;
             }
             //15~18시
-            else if(ntime4 >= 15 && ntime3 == 18 && a == 1 && ntime4 <= ntime3)
+            else if(ntime >= 15 && ptime == 18 && a == 1 && ntime <= ptime)
             {
                 ni = i;
                 a = 0;
                 b = 1;
             }
             //18~21시
-            else if(ntime4 >= 18 && ntime3 == 21 && a == 1 && ntime4 <= ntime3)
+            else if(ntime >= 18 && ptime == 21 && a == 1 && ntime <= ptime)
             {
                 ni = i;
                 a = 0;
                 b =  1;
             }
             //21~24시
-            else if(ntime4 >= 21 && ntime3 == 0 && a == 1)
+            else if(ntime >= 21 && ptime == 0 && a == 1)
             {
                 ni = i;
                 a = 0;
@@ -409,12 +458,14 @@ public class ClothesFragment extends Fragment {
                         tvLocal.setText("데이터가 없습니다");
                        tvTemp.setText("데이터가 없습니다");
                        tvCloud.setText("데이터가 없습니다");
+                       tvClothes.setText("데이터가 없습니다");
 
                     DataToInformation(); // 자료 클래스로 저장,
 
                     String localData = "";
                     String tempData = "";
                     String cloudData = "";
+                    Double avgtempData = 0.0;
                     String now="";
 
                     DataChangedToHangeul();
@@ -422,12 +473,48 @@ public class ClothesFragment extends Fragment {
                     localData = localData + LocalPrint();
                     tempData = tempData + TempPrint();
                     cloudData = cloudData + CloudPrint();
+                    avgtempData = avgtempData + AvgTempPrint();
                     now = now + Now();
 
                     tvLocal.setText(localData);
                     tvTemp.setText(tempData);
                     tvCloud.setText(cloudData);
-                    tvClothesData.setText(now);
+
+                    if(avgtempData >=26.0)
+                    {
+                        ivClothesData.setImageResource(R.drawable.tog);
+                        tvClothes.setText("다리없는 바디수트");
+                    }
+                    else if(avgtempData >=24.0)
+                    {
+                        ivClothesData.setImageResource(R.drawable.temp24);
+                        tvClothes.setText("다리없는 바디수트+보온성 겉옷");
+                    }
+                    else if(avgtempData >=22.0)
+                    {
+                        ivClothesData.setImageResource(R.drawable.temp22);
+                        tvClothes.setText("전신 바디수트+보온성 겉옷");
+                    }
+                    else if(avgtempData >=20.0)
+                    {
+                        ivClothesData.setImageResource(R.drawable.temp20);
+                        tvClothes.setText("다리없는 바디수트+전신 바디수트+보온성 겉옷");
+                    }
+                    else if(avgtempData >=18.0)
+                    {
+                        ivClothesData.setImageResource(R.drawable.temp18);
+                        tvClothes.setText("보온 내복+전신 바디수트+보온성 겉옷");
+                    }
+                    else if(avgtempData >= 16.0)
+                    {
+                        ivClothesData.setImageResource(R.drawable.temp16);
+                        tvClothes.setText("보온 내복+전신 바디수트+보온성 겉옷+양말");
+                    }
+                    else
+                    {
+                        ivClothesData.setImageResource(R.drawable.temp14);
+                        tvClothes.setText("보온 내복+전신 바디수트+보온성 겉옷+양말+장갑+모자");
+                    }
 
                     if(cloudData.contains("하늘")) {
                         ivCloud.setImageResource(R.drawable.sun);

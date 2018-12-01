@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -29,6 +31,8 @@ public class RegistActivity extends AppCompatActivity {
     private EditText editTextHeight;
     private EditText editTextMonth;
     private EditText editTextWeight;
+    private RadioGroup rg;
+    private String gender;
 
 
     @Override
@@ -43,7 +47,26 @@ public class RegistActivity extends AppCompatActivity {
         editTextMonth = (EditText)findViewById(R.id.etMonth);
         editTextWeight = (EditText)findViewById(R.id.etWeight);
 
+        rg = (RadioGroup) findViewById(R.id.rg);
+        rg.setOnCheckedChangeListener(radioGroupButtonChangeListener);
+
     }
+
+    RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup radioGroup, int i) {
+            if(i == R.id.rbm){
+                Toast.makeText(RegistActivity.this,"남자아이",Toast.LENGTH_SHORT).show();
+                gender = "1";
+            }
+            else if(i == R.id.rbg)
+            {
+                Toast.makeText(RegistActivity.this,"여자아이",Toast.LENGTH_SHORT).show();
+                gender = "2";
+            }
+        }
+    };
+
     public void insert(View view) {
         String Id = editTextId.getText().toString();
         String Pw = editTextPw.getText().toString();
@@ -51,18 +74,45 @@ public class RegistActivity extends AppCompatActivity {
         String Height = editTextHeight.getText().toString();
         String Month = editTextMonth.getText().toString();
         String Weight = editTextWeight.getText().toString();
+        String Gender = gender;
 
-        insertoToDatabase(Id, Pw, Head, Height, Month, Weight);
+        if(Pw.equals(""))
+        {
+            Toast.makeText(this,"비밀번호가 공백입니다.", Toast.LENGTH_SHORT).show();
+        }else if(Head.equals(""))
+        {
+            Toast.makeText(this,"아이 머리둘레가 공백입니다.", Toast.LENGTH_SHORT).show();
+        }
+        else if(Height.equals(""))
+        {
+            Toast.makeText(this,"아이 키가 공백입니다.", Toast.LENGTH_SHORT).show();
+        }
+        else if(Month.equals(""))
+        {
+            Toast.makeText(this,"아이 개월 수가 공백입니다.", Toast.LENGTH_SHORT).show();
+        }
+        else if(Weight.equals(""))
+        {
+            Toast.makeText(this,"아이 몸무게가 공백입니다.", Toast.LENGTH_SHORT).show();
+        }
+        else if(!gender.equals("1") && !gender.equals("2"))
+        {
+            Toast.makeText(this,"아이의 성별을 입력해주세요.", Toast.LENGTH_SHORT).show();
+        }
+        else
+            {
+            insertoToDatabase(Id, Pw, Head, Height, Month, Weight, Gender);
+            }
     }
     private void insertoToDatabase(String Id, String Pw, String Head, String Height,
-                                   String Month ,String Weight) {
+                                   String Month, String Weight, String Gender) {
 
         class InsertData extends AsyncTask<String, Void, String> {
             ProgressDialog loading;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(RegistActivity.this, "Please Wait", null, true, true);
+                loading = ProgressDialog.show(RegistActivity.this, "잠시만 기다려주세요.", null, true, true);
             }
             @Override
             protected void onPostExecute(String s) {
@@ -80,6 +130,7 @@ public class RegistActivity extends AppCompatActivity {
                     String Height = (String) params[3];
                     String Month = (String) params[4];
                     String Weight = (String) params[5];
+                    String Gender = (String) params[6];
 
                     String link = "http://otl9882.codns.com:443/regist.php";
                     String data = URLEncoder.encode("Id", "UTF-8") + "=" + URLEncoder.encode(Id, "UTF-8");
@@ -88,6 +139,7 @@ public class RegistActivity extends AppCompatActivity {
                     data += "&" + URLEncoder.encode("Height", "UTF-8") + "=" + URLEncoder.encode(Height, "UTF-8");
                     data += "&" + URLEncoder.encode("Month", "UTF-8") + "=" + URLEncoder.encode(Month, "UTF-8");
                     data += "&" + URLEncoder.encode("Weight", "UTF-8") + "=" + URLEncoder.encode(Weight, "UTF-8");
+                    data += "&" + URLEncoder.encode("Gender", "UTF-8") + "=" + URLEncoder.encode(Gender, "UTF-8");
 
                     URL url = new URL(link);
                     URLConnection conn = url.openConnection();
@@ -114,11 +166,13 @@ public class RegistActivity extends AppCompatActivity {
                 }
             }
         }
-        InsertData task = new InsertData();
-        task.execute(Id, Pw, Head, Height, Month, Weight);
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+            InsertData task = new InsertData();
+            task.execute(Id, Pw, Head, Height, Month, Weight, Gender);
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+
     }
 
     public void signNo(View view)
