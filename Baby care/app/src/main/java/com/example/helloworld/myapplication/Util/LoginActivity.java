@@ -33,6 +33,7 @@ import java.util.List;
 import com.example.helloworld.myapplication.R;
 import com.example.helloworld.myapplication.activity.MainActivity;
 import com.example.helloworld.myapplication.fragment.ClothesFragment;
+import com.example.helloworld.myapplication.fragment.CompareFragment;
 import com.example.helloworld.myapplication.fragment.DailyFragment;
 
 public class LoginActivity extends AppCompatActivity {
@@ -143,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 String id =  arg0[0];
 
-                String link = "http://otl9882.codns.com/month.php?Id=" + id;
+                String link = "http://otl9882.codns.com:443/month.php?Id=" + id;
 
                 URL url = new URL(link);
                 HttpClient client = new DefaultHttpClient();
@@ -169,6 +170,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result){
+            CompareFragment.babyHeight = result.split(",")[0];    //키
+            CompareFragment.babyWeight = result.split(",")[1];    //몸무게
+            CompareFragment.babyHead = result.split(",")[2];    //머리이이이잇
+            CompareFragment.babyMonth = result.split(",")[3];   //생년워르르르
             DailyFragment.sbabymonth = result.split(",")[3];
         }
     }

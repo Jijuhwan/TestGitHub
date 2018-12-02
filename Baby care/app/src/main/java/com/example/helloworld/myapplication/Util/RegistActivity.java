@@ -32,7 +32,7 @@ public class RegistActivity extends AppCompatActivity {
     private EditText editTextMonth;
     private EditText editTextWeight;
     private RadioGroup rg;
-    private String gender;
+    private String gender = "0";
 
 
     @Override
@@ -56,12 +56,10 @@ public class RegistActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
             if(i == R.id.rbm){
-                Toast.makeText(RegistActivity.this,"남자아이",Toast.LENGTH_SHORT).show();
                 gender = "1";
             }
             else if(i == R.id.rbg)
             {
-                Toast.makeText(RegistActivity.this,"여자아이",Toast.LENGTH_SHORT).show();
                 gender = "2";
             }
         }
@@ -95,7 +93,7 @@ public class RegistActivity extends AppCompatActivity {
         {
             Toast.makeText(this,"아이 몸무게가 공백입니다.", Toast.LENGTH_SHORT).show();
         }
-        else if(!gender.equals("1") && !gender.equals("2"))
+        else if(gender.equals("0"))
         {
             Toast.makeText(this,"아이의 성별을 입력해주세요.", Toast.LENGTH_SHORT).show();
         }

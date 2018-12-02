@@ -2,7 +2,7 @@
 <resources>
     <string-array name="os">
         <item>날씨 API[openweather]</item>
-        <item>미세먼지 API[공공데이터포털]</item>
+        <item>미세먼지 API[Air Quality]</item>
         <item>포토 뷰[https://github.com/chrisbanes/PhotoView]</item>
     </string-array>
 

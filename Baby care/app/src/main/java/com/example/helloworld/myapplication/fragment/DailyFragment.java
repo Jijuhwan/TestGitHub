@@ -31,7 +31,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class DailyFragment extends Fragment {
     MainActivity activity;
 
-    public static String sbabymonth; //엄마가 입력한 아기 개월 수
+    public static String sbabymonth= ""; //엄마가 입력한 아기 개월 수
     int babymonth;
 
     @Override
@@ -69,11 +69,11 @@ public class DailyFragment extends Fragment {
 
                 inyear =inyear - 2000;
                 int year = inyear - iyear;
-                int month = inmonth - imonth;
+                int month = (inmonth+1) - imonth;
 
                 babymonth = (year*12) + month;
 
-                if(babymonth < 4)
+                if(babymonth >= 0 && babymonth < 4 )
                 {
                     Toast.makeText(getContext(), "오늘의 이유식 : 모유, 분유", Toast.LENGTH_SHORT).show();
                 }
@@ -1034,7 +1034,7 @@ public class DailyFragment extends Fragment {
 
                     }
                 }
-                else
+                else if(babymonth >= 24)
                 {
                     if(dayOfMonth % 9 == 1) //1,10,19,28
                     {
@@ -1105,6 +1105,10 @@ public class DailyFragment extends Fragment {
                         }
 
                     }
+                }
+                else
+                {
+                    Toast.makeText(getContext(),"아직 태어나지 않았어요.",Toast.LENGTH_LONG).show();
                 }
             }
      });
