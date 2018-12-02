@@ -117,6 +117,7 @@ public class CompareFragment extends Fragment{
 
     public void compare()
     {
+        imageIndex = 0;
         //평균보다 작다
         int Height = Integer.parseInt(babyHeight);
         int avgHeight = Integer.parseInt(savgHeight);
