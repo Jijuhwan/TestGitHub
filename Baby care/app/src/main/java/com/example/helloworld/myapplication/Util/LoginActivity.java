@@ -183,6 +183,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
+            inputID.setText("");
+            inputPW.setText("");
+
             if (response.equalsIgnoreCase("삭제 중...")) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -240,6 +243,18 @@ public class LoginActivity extends AppCompatActivity {
             } catch (Exception e) {
                 return new String("Exception: " + e.getMessage());
             }
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            DailyFragment.sbabymonth = result.split(",")[3];
+            CompareFragment.babyHeight = result.split(",")[0];
+            CompareFragment.babyWeight = result.split(",")[1];
+            CompareFragment.babyHead = result.split(",")[2];
+            CompareFragment.babyMonth = result.split(",")[3];
+            CompareFragment.babyGender = result.split(",")[4];
+
 
         }
     }

@@ -49,6 +49,7 @@ public class CompareFragment extends Fragment{
     public static String babyWeight;
     public static String babyHead;
     public static String babyMonth;
+    public static String babyGender;
 
     String savgHeight;
     String savgWeight;
@@ -96,8 +97,8 @@ public class CompareFragment extends Fragment{
         //시간 불러오는 메소드
         getTime();
 
-        task = new avg();
-        task.execute(Month);
+            task = new avg();
+            task.execute(Month);
 
         compareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,8 +276,15 @@ public class CompareFragment extends Fragment{
 
             try {
                 String month =  arg0[0];
+                String link;
 
-                String link = "http://otl9882.codns.com:443/manmodel.php?Month=" + month;
+                if(babyGender.equals("1"))
+                {
+                    link = "http://otl9882.codns.com:443/manmodel.php?Month=" + month;
+                }
+                else {
+                    link = "http://otl9882.codns.com:443/girlmodel.php?Month=" + month;
+                }
 
                 HttpClient client = new DefaultHttpClient();
                 HttpGet request = new HttpGet();

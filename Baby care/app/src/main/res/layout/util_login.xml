@@ -49,6 +49,7 @@
         android:paddingLeft="15dp"
         android:layout_gravity="center"
         android:hint="PassWord를 입력해주세요."
+        android:inputType="textPassword"
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:layout_below="@id/etID"
